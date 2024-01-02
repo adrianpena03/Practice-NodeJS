@@ -29,21 +29,47 @@
 
 // --------------------------------------------
 
-// const os = require('os');
+// const os = require('os'); // importing
 
 // const freeMemory = os.freemem();
 
 // console.log(`Free Memory: ${freeMemory} bytes`);
 
+// --------------------------------------------
+
+// const fs = require('fs');
+
+// // const files = fs.readdirSync('./'); // Return all files and folders in current folder. str array
+// // console.log(files);
+
+// fs.readdir('./', function(err, files) { // read contents of curr directory. this function takes in two parameters (path of curr_dir and callback function (func to be run once operation is complete))
+//     if (err) console.log('Error', err); // checks if error occurred, if there is, prints an error message along with error details
+//     else console.log('Result', files) // if no error, print the list of files and directories in curr directory. 'files' parameter (callback func) contains array of filenames
+// });
+
 // ---------------------------------------------
 
-const fs = require('fs');
+// const EventEmitter = require('events'); // Class because of capitilized convention at beginning of every word
+// const emitter = new EventEmitter(); // Instance of EventEmitter class
 
-// const files = fs.readdirSync('./'); // Return all files and folders in current folder. str array
-// console.log(files);
+// emitter.on('messageLogged', function(arg){ // Register a listener, put args (usually also e or eventArg) so it can take arguments
+//     console.log('Listener called', arg);
+// })
 
-fs.readdir('./', function(err, files) { // read contents of curr directory. this function takes in two parameters (path of curr_dir and callback function (func to be run once operation is complete))
-    if (err) console.log('Error', err); // checks if error occurred, if there is, prints an error message along with error details
-    else console.log('Result', files) //if no error, print the list of files and directories in curr directory. 'files' parameter (callback func) contains array of filenames
-});
+// emitter.emit('messageLogged', {id: 1, url: 'http://'}); // raise an event
 
+// ----------------------------------------------
+
+// Extended EventEmitter
+
+const EventEmitter = require('events'); // Class because of capitilized convention at beginning of every word
+
+const Logger = require('./logger_aa');
+const logger = new Logger(); // created Logger object
+
+// Register a listener
+logger.on('messageLogged', function(arg) { // can also write ', (arg) => {....' instead of saying 'function' 
+    console.log('Listener called', arg);
+})
+
+logger.log('message'); // to log a message
