@@ -62,14 +62,18 @@
 
 // Extended EventEmitter
 
-const EventEmitter = require('events'); // Class because of capitilized convention at beginning of every word
+// const EventEmitter = require('events'); // Class because of capitilized convention at beginning of every word
 
-const Logger = require('./logger_aa');
-const logger = new Logger(); // created Logger object
+// const Logger = require('./logger_aa');
+// const logger = new Logger(); // created Logger object
 
-// Register a listener
-logger.on('messageLogged', function(arg) { // can also write ', (arg) => {....' instead of saying 'function' 
-    console.log('Listener called', arg);
-})
+// // Register a listener
+// logger.on('messageLogged', function(arg) { // can also write ', (arg) => {....' instead of saying 'function' 
+//     console.log('Listener called', arg);
+// })
 
-logger.log('message'); // to log a message
+// logger.log('message'); // to log a message
+
+// ---------------------------------------------------
+
+console.log('hi');
