@@ -1,11 +1,17 @@
 // GLOBAL VARIABLES
 
-// console.log("Dirname: " + __dirname);
-// console.log("Filename: " + __filename);
+// console.log("Dirname: " + __dirname + "\n"); // pwd
+// console.log("Filename: " + __filename + "\n"); // pwd + /<filename>
 
-// console.log("Process CWD: " + process.cwd());
+// console.log("Process CWD: " + process.cwd() + "\n"); // pwd
 
-// console.log(process.argv[0]);
+// console.log("process.argv[0]: " + process.argv[0] + "\n"); // node
+
+
+// console.log("process.argv[1]: " + process.argv[1] + "\n"); // usingPath&Fs.js
+ 
+// console.log("process.argv[2]: " + process.argv[2] + "\n"); // undefined
+
 
 
 // ----------------
@@ -15,20 +21,20 @@
 const fs = require('fs');
 const path = require('path');
 
-// console.log(path.basename(__filename)); // prints filename
-// console.log(path.extname(__filename)); // prints extension of file
+// console.log("path.basename: " + path.basename(__filename) + "\n"); // prints filename
+// console.log("path.extname: " + path.extname(__filename) + "\n"); // prints extension of file
 
-// console.log(path.dirname(__filename)); // pwd (path)
+// console.log("path.dirname(__filename): " + path.dirname(__filename) + "\n"); // pwd (path)
 
-// console.log(path.basename(path.dirname(__filename))); // Prints curr directory (one) 
-// console.log(path.dirname(path.dirname(__filename))); // Prints the directory outside curr one
+// console.log("path.basename(path.dirname...: " + path.basename(path.dirname(__filename)) + "\n"); // Prints only curr directory 
+// console.log(path.dirname(path.dirname(__filename) + "\n")); // Prints the directory outside curr one
 
-// console.log(path.join('one', 'two', 'three')); // one/two/three
-// console.log(path.resolve('one', 'two', 'three')); // pwd + /one/two/three
+// console.log("Path.join: " + path.join('one', 'two', 'three') + "\n"); // one/two/three
+// console.log("path.resolve: " + path.resolve('one', 'two', 'three') + "\n"); // pwd + /one/two/three
 
-// --------------------
+// // --------------------
 
-// Define list and iterate through in js
+// // Define list and iterate through in js
 
 // var list = ['Mercury', 'Venus', 'Earth', 'Mars']
 
@@ -36,11 +42,11 @@ const path = require('path');
 //     console.log(list[i]);
 //     }
 
-// list.forEach(list => {
-//     console.log(list);
+// list.forEach(item => {
+//     console.log(item);
 //     });
 
-// ---------------------
+// // ---------------------
 
 // const name_folder = path.dirname(__filename).split(path.sep);
 
@@ -66,6 +72,21 @@ if (process.argv.length < 3) {
   console.error("Error-- Usage: node activity2.js <folder1> <folder2> ...");
 }
 
+if (process.argv.length < 3) {
+  console.error("Error" + "\n" + "Usage: node <filename> <folder1> <folder2> ...");
+}
+
+// const folderNames = process.argv.slice(2);
+// // 2. Create Folders
+// folderNames.forEach(folderName => {
+//   try {
+//     fs.mkdirSync(path.join(__dirname, folderName));
+//     console.log(`Created folder: ${folderName}`);
+//   } catch (error) {
+//     console.log(`Error creating folder ${folderName}`);
+//   }
+// });
+
 // 2. Create folders
 const folderNames = process.argv.slice(2);
 for (const folderName of folderNames) {
@@ -81,11 +102,13 @@ for (const folderName of folderNames) {
 fs.readdir(__dirname, (err, files) => {
   if (err) {
     console.error(`Error reading directory: ${err.message}`);
-  } else {
+  } 
+  else {
     console.log("\nDirectory content:");
     console.log(files.join("\n"));
   }
 });
+
 
 // 4. Delete folders
 for (const folderName of folderNames) {
@@ -106,4 +129,5 @@ fs.readdir(__dirname, (err, files) => {
     console.log(files.join("\n"));
   }
 });
+
 
