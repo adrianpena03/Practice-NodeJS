@@ -46,6 +46,15 @@
 
 // -----------------------------------
 
-process.argv.forEach((val, index) => { // 'forEach' is a method that acts as a for loop
-    console.log(`${index}: ${val}`)
-});
+// process.argv.forEach((val, index) => { // 'forEach' is a method that acts as a for loop
+//     console.log(`${index}: ${val}`)
+// });
+
+const path = require('path');
+
+let workingPath = __dirname;
+console.log('First Working Path: '+ workingPath);
+
+const resolvedPath = path.resolve(workingPath, '..');
+console.log('Second Working Path: ' + resolvedPath);
+
