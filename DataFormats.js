@@ -42,7 +42,7 @@ let person = {
 };
 
 person.greet = function () { //adds the greet method to the person object
-console.log('Hello!');
+    console.log('Hello!');
 }
 person.greet();
 
