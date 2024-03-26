@@ -21,3 +21,4 @@ console.log(parsedurl);
 // const {pathname, searchParams} = new URL(req.url, baseURL);
 // console.log(pathname);
 // console.log(searchParams);
+
