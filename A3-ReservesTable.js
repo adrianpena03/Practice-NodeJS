@@ -15,25 +15,25 @@ db.connect((err) => {
     }
     console.log('Connected to the MySQL server.');
 
-    // Retrieve boat data from DB
-    function getBoat(callback) {
-        db.query("SELECT * FROM boats", (err, results) => {
+    // Retrieve reserve data from DB
+    function getReserve(callback) {
+        db.query("SELECT * FROM reserves", (err, results) => {
             if (err) {
-                console.error('Error fetching boats:', err);
+                console.error('Error fetching reserves:', err);
                 return callback(err, null);
             }
             callback(null, results);
         });
     }
 
-    // Implementing new data to boats table
-    function insertBoat(boatData, callback) {
+    // Implementing new data to reserves table
+    function insertReserve(reserveData, callback) {
         db.query(
-            "INSERT INTO boats (B_NAME, B_TYPE) VALUES (?, ?)",
-            [boatData.B_NAME, boatData.TYPE],
+            "INSERT INTO reserves (b_id, Day) VALUES (?, ?)",
+            [reserveData.B_NAME, reserveData.TYPE],
             (err, results) => {
                 if (err) {
-                    console.error('Error inserting boats:', err);
+                    console.error('Error inserting reserves:', err);
                     return callback(err, null);
                 }
                 console.log('results are: '+ results);
@@ -42,35 +42,35 @@ db.connect((err) => {
         );
     }
 
-    // Change current boat data
-    function updateBoat(b_id, updateFields, callback) {
+    // Change current reserve data
+    function updateReserve(s_id, updateFields, callback) {
         const setClause = Object.keys(updateFields)
             .map((field) => `${field} = ?`)
             .join(", ");
 
         const values = Object.values(updateFields);
-        values.push(b_id);
+        values.push(s_id);
 
-        const query = `UPDATE boats SET ${setClause} WHERE B_Id = ?`;
+        const query = `UPDATE reserves SET ${setClause} WHERE s_id = ?`;
 
         db.query(query, values, (err, results) => {
             if (err) {
-                console.error('Error updating boat:', err);
+                console.error('Error updating reserve:', err);
                 return callback(err, null);
             }
-            console.log('Boat updated successfully:', results);
+            console.log('reserve updated successfully:', results);
             callback(null, true);
         });
     }
 
-    // Deleting boat data from database
-    function deleteBoat(b_id, callback) {
+    // Deleting reserve data from database
+    function deleteReserve(s_id, callback) {
         db.query(
-            "DELETE FROM boats WHERE B_Id = ?",
-            [b_id],
+            "DELETE FROM reserves WHERE s_id = ?",
+            [s_id],
             (err, results) => {
                 if (err) {
-                    console.error('Error deleting boat:', err);
+                    console.error('Error deleting reserve:', err);
                     return callback(err, null);
                 }
                 callback(null, true);
@@ -80,10 +80,10 @@ db.connect((err) => {
 
     // Export the functions using module.exports
     module.exports = {
-        getBoat,
-        insertBoat,
-        updateBoat,
-        deleteBoat
+        getReserve,
+        insertReserve,
+        updateReserve,
+        deleteReserve
     };
 });
 

@@ -1,4 +1,9 @@
-// A3 Created by Adrian Pena
+/*
+Name: Adrian Pena
+Date: 04/16/2024
+Title: 
+Desciption: 
+*/
 
 const mysql = require('mysql2');
 
@@ -15,25 +20,25 @@ db.connect((err) => {
     }
     console.log('Connected to the MySQL server.');
 
-    // Retrieve boat data from DB
-    function getBoat(callback) {
-        db.query("SELECT * FROM boats", (err, results) => {
+    // Retrieve Sailor data from DB
+    function getSailor(callback) {
+        db.query("SELECT s_id, S_name, B_date, Rate FROM Sailors", (err, results) => {
             if (err) {
-                console.error('Error fetching boats:', err);
+                console.error('Error fetching Sailors:', err);
                 return callback(err, null);
             }
             callback(null, results);
         });
     }
 
-    // Implementing new data to boats table
-    function insertBoat(boatData, callback) {
+    // Implementing new data to Sailors table
+    function insertSailor(SailorData, callback) {
         db.query(
-            "INSERT INTO boats (B_NAME, B_TYPE) VALUES (?, ?)",
-            [boatData.B_NAME, boatData.TYPE],
+            "INSERT INTO Sailors (S_name, B_date, Rate) VALUES (?, ?)",
+            [SailorData.S_Name, SailorData.B_date, SailorData.Rate],
             (err, results) => {
                 if (err) {
-                    console.error('Error inserting boats:', err);
+                    console.error('Error inserting Sailors:', err);
                     return callback(err, null);
                 }
                 console.log('results are: '+ results);
@@ -42,35 +47,35 @@ db.connect((err) => {
         );
     }
 
-    // Change current boat data
-    function updateBoat(b_id, updateFields, callback) {
+    // Change current Sailor data
+    function updateSailor(s_id, updateFields, callback) {
         const setClause = Object.keys(updateFields)
             .map((field) => `${field} = ?`)
             .join(", ");
 
         const values = Object.values(updateFields);
-        values.push(b_id);
+        values.push(s_id);
 
-        const query = `UPDATE boats SET ${setClause} WHERE B_Id = ?`;
+        const query = `UPDATE Sailors SET ${setClause} WHERE s_id = ?`;
 
         db.query(query, values, (err, results) => {
             if (err) {
-                console.error('Error updating boat:', err);
+                console.error('Error updating Sailor:', err);
                 return callback(err, null);
             }
-            console.log('Boat updated successfully:', results);
+            console.log('Sailor updated successfully:', results);
             callback(null, true);
         });
     }
 
-    // Deleting boat data from database
-    function deleteBoat(b_id, callback) {
+    // Deleting Sailor data from database
+    function deleteSailor(s_id, callback) {
         db.query(
-            "DELETE FROM boats WHERE B_Id = ?",
-            [b_id],
+            "DELETE FROM Sailors WHERE s_id = ?",
+            [s_id],
             (err, results) => {
                 if (err) {
-                    console.error('Error deleting boat:', err);
+                    console.error('Error deleting Sailor:', err);
                     return callback(err, null);
                 }
                 callback(null, true);
@@ -80,10 +85,10 @@ db.connect((err) => {
 
     // Export the functions using module.exports
     module.exports = {
-        getBoat,
-        insertBoat,
-        updateBoat,
-        deleteBoat
+        getSailor,
+        insertSailor,
+        updateSailor,
+        deleteSailor
     };
 });
 
