@@ -82,7 +82,7 @@ const PUTHandler = (file, qs, cb)=>{
             if (keys.indexOf("quantity")!== -1){
                 list[qs.index].quantity = qs.quantity;
             }
-            if (keys.indexOf("priority")!== -1){
+            if (keys.indexOf("priority")!== -1){7
                 list[qs.index].priority = qs.priority;
             }
             if (keys.indexOf("category")!== -1) {

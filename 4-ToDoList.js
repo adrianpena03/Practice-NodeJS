@@ -5,7 +5,7 @@ var list = [];
 const reqHandler = (req,res)=>{
 switch(req.method){
     case 'POST': 
-        let item = '';
+        let item = ''; 
         //set the encoding to store the items in the list as strings
         req.setEncoding('utf8');
         //read the data arriving at the server
