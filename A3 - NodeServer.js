@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    database: 'SailingAdventure',
+    database: 'SailingAdventure_DB',
 });
 
 // Connect to the database
