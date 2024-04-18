@@ -38,7 +38,7 @@ db.connect((err) => {
     // Implementing new data to Sailors table
     function insertSailor(SailorData, callback) {
         db.query(
-            // Insert query for Sailors table below
+            // Insert query for Sailors table below using placeholder values
             "INSERT INTO Sailors (S_NAME, B_DATE, RATE) VALUES (?, ?, ?)",
             [SailorData.S_NAME, SailorData.B_DATE, SailorData.RATE],
             (err, results) => {
@@ -55,33 +55,38 @@ db.connect((err) => {
     // Change current Sailor data
     function updateSailor(S_ID, updateFields, callback) {
         const setClause = Object.keys(updateFields)
-            .map((field) => `${field} = ?`)
-            .join(", ");
+            .map((field) => `${field} = ?`) // Generate each field with a placeholder for value
+            .join(", "); // Join the fields with commas for SQL syntax
 
         const values = Object.values(updateFields);
-        values.push(S_ID);
+        values.push(S_ID); // Add S_ID to the values array
 
+        // Create SQL UPDATE query with placeholders
         const query = `UPDATE Sailors SET ${setClause} WHERE S_ID = ?`;
 
         db.query(query, values, (err, results) => {
+            // Log error if query fails OR pass result to callback functions if doesn't fail
             if (err) {
                 console.error('Error updating Sailor:', err);
                 return callback(err, null);
             }
+            // If query is successful, pass results to the callback function
             callback(null, results);
         });
     }
 
     // Deleting Sailor data from database
     function deleteSailor(S_ID, callback) {
+        // Create the SQL DELETE to remove Sailor based on S_ID (Sailor ID)
         db.query(
             "DELETE FROM Sailors WHERE S_ID = ?",
             [S_ID],
-            (err, results) => {
+            (err, results) => { // Callback function to handle query results or errors
                 if (err) {
                     console.error('Error deleting Sailor:', err);
                     return callback(err, null);
                 }
+                // If deletion is completed, pass results to callback function
                 callback(null, results);
             }
         );
@@ -95,11 +100,4 @@ db.connect((err) => {
         deleteSailor
     };
 
-    // // Close the database connection when all operations are done
-    // db.end((err) => {
-    //     if (err) {
-    //         return console.log('Error closing connection:', err.message);
-    //     }
-    //     console.log('Connection closed.');
-    // });
 });

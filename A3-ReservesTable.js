@@ -75,6 +75,7 @@ db.connect((err) => {
     // Deleting reserve data from database
     function deleteReserve(S_ID, callback) {
         db.query(
+            // Delete the S_ID of reserves query to delete whole row
             "DELETE FROM Reserves WHERE S_ID = ?",
             [S_ID],
             (err, results) => {
@@ -86,7 +87,6 @@ db.connect((err) => {
             }
         );
     }
-
 
     // Export the functions using module.exports
     module.exports = {
