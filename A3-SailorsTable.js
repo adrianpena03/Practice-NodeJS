@@ -1,12 +1,14 @@
 /*
-Name: Adrian Pena
-Date: 04/16/2024
-Title: Assignment 3
-Description:
+- Name: Adrian Pena
+- Filename: A3-SailorsTable.js
+- Date: 04/14/2024
+- Description: CRUD Statements for the Sailors table
 */
 
+// Import required mysql dependency
 const mysql = require('mysql2');
 
+// Create database connection
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -22,8 +24,10 @@ db.connect((err) => {
 
     // Retrieve Sailor data from DB
     function getSailor(callback) {
+        // Query the Sailors table to retrieve its values
         db.query("SELECT S_ID, S_NAME, B_DATE, RATE FROM Sailors", (err, results) => {
             if (err) {
+                // if error, return error message to client
                 console.error('Error fetching Sailors:', err);
                 return callback(err, null);
             }
@@ -34,10 +38,12 @@ db.connect((err) => {
     // Implementing new data to Sailors table
     function insertSailor(SailorData, callback) {
         db.query(
+            // Insert query for Sailors table below
             "INSERT INTO Sailors (S_NAME, B_DATE, RATE) VALUES (?, ?, ?)",
             [SailorData.S_NAME, SailorData.B_DATE, SailorData.RATE],
             (err, results) => {
                 if (err) {
+                    // If error, return error message
                     console.error('Error inserting Sailor:', err);
                     return callback(err, null);
                 }

@@ -1,4 +1,9 @@
-// A3 Created by Adrian Pena
+/*
+- Name: Adrian Pena
+- Filename: A3-BoatsTable.js
+- Date: 04/14/2024
+- Description: CRUD Statements for the Boats table
+*/
 
 const mysql = require('mysql2');
 
@@ -13,7 +18,7 @@ db.connect((err) => {
     if (err) {
         return console.error('error: Connection to database (BoatsTable file)' + err.message);
     }
-    console.log('Connected to the MySQL server.');
+    //console.log('Connected to the MySQL server.');
 
     // Retrieve boat data from DB
     function getBoat(callback) {
@@ -30,7 +35,7 @@ db.connect((err) => {
     function insertBoat(boatData, callback) {
         db.query(
             "INSERT INTO boats (B_NAME, B_TYPE) VALUES (?, ?)",
-            [boatData.B_NAME, boatData.B_TYPE], // Changed TYPE to B_TYPE
+            [boatData.B_NAME, boatData.B_TYPE],
             (err, results) => {
                 if (err) {
                     console.error('Error inserting boats: ', err);
@@ -83,5 +88,5 @@ db.connect((err) => {
         updateBoat,
         deleteBoat
     };
-
 });
+
