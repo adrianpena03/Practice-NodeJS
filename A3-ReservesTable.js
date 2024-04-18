@@ -11,13 +11,13 @@ const db = mysql.createConnection({
 // Connect to the database
 db.connect((err) => {
     if (err) {
-        return console.error('error: ' + err.message);
+        return console.error('error: Connection to database error (ReservesTable file)' + err.message);
     }
     console.log('Connected to the MySQL server.');
 
     // Retrieve reserve data from DB
     function getReserve(callback) {
-        db.query("SELECT * FROM reserves", (err, results) => {
+        db.query("SELECT * FROM Reserves", (err, results) => {
             if (err) {
                 console.error('Error fetching reserves:', err);
                 return callback(err, null);
@@ -29,8 +29,8 @@ db.connect((err) => {
     // Implementing new data to reserves table
     function insertReserve(reserveData, callback) {
         db.query(
-            "INSERT INTO reserves (B_ID, DAY) VALUES (?, ?)",
-            [reserveData.B_NAME, reserveData.TYPE],
+            "INSERT INTO Reserves (S_ID, B_ID, DAY) VALUES (?, ?, ?)",
+            [reserveData.S_ID, reserveData.B_ID, reserveData.DAY],
             (err, results) => {
                 if (err) {
                     console.error('Error inserting reserves:', err);
@@ -50,7 +50,7 @@ db.connect((err) => {
         const values = Object.values(updateFields);
         values.push(S_ID);
 
-        const query = `UPDATE reserves SET ${setClause} WHERE S_ID = ?`;
+        const query = `UPDATE Reserves SET ${setClause} WHERE S_ID = ?`;
 
         db.query(query, values, (err, results) => {
             if (err) {
@@ -64,7 +64,7 @@ db.connect((err) => {
     // Deleting reserve data from database
     function deleteReserve(S_ID, callback) {
         db.query(
-            "DELETE FROM reserves WHERE S_ID = ?",
+            "DELETE FROM Reserves WHERE S_ID = ?",
             [S_ID],
             (err, results) => {
                 if (err) {
@@ -76,6 +76,7 @@ db.connect((err) => {
         );
     }
 
+
     // Export the functions using module.exports
     module.exports = {
         getReserve,
@@ -83,12 +84,4 @@ db.connect((err) => {
         updateReserve,
         deleteReserve
     };
-});
-
-// Close the database connection when all operations are done
-db.end((err) => {
-    if (err) {
-        return console.log('Error closing connection:', err.message);
-    }
-    console.log('Connection closed.');
 });

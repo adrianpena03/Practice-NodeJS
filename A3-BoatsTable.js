@@ -11,7 +11,7 @@ const db = mysql.createConnection({
 // Connect to the database
 db.connect((err) => {
     if (err) {
-        return console.error('error: ' + err.message);
+        return console.error('error: Connection to database (BoatsTable file)' + err.message);
     }
     console.log('Connected to the MySQL server.');
 
@@ -30,7 +30,7 @@ db.connect((err) => {
     function insertBoat(boatData, callback) {
         db.query(
             "INSERT INTO boats (B_NAME, B_TYPE) VALUES (?, ?)",
-            [boatData.B_NAME, boatData.TYPE],
+            [boatData.B_NAME, boatData.B_TYPE], // Changed TYPE to B_TYPE
             (err, results) => {
                 if (err) {
                     console.error('Error inserting boats: ', err);
@@ -83,12 +83,5 @@ db.connect((err) => {
         updateBoat,
         deleteBoat
     };
-});
 
-// Close the database connection when all operations are done
-db.end((err) => {
-    if (err) {
-        return console.log('Error closing connection:', err.message);
-    }
-    console.log('Connection closed.');
 });

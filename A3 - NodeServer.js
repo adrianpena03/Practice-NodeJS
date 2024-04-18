@@ -2,6 +2,7 @@
 const mysql = require('mysql2');
 const fs = require('fs');
 const qs = require('qs');
+const http = require('http');
 
 // Importing A3 CRUD Operations for the 3 tables
 const sailors = require('./A3-SailorsTable.js');
@@ -14,6 +15,16 @@ const db = mysql.createConnection({
     user: 'root',
     database: 'SailingAdventure_DB',
 });
+
+function closeDBConnection() {
+    db.end((err) => {
+        if (err) {
+            console.error('Error closing database connection:', err.message);
+        } else {
+            console.log('Database connection closed.');
+        }
+    });
+}
 
 // Adding handler response
 function handleresponse(res, err, results) {
@@ -33,7 +44,7 @@ const serverHandler = (req, res) => {
     const path = parsedUrl.pathname;
     const trimmedPath = path.replace(/^\/+|\/+$/g, '');
     const urlQuery = parsedUrl.searchParams;
-    const queryString = Object.fromEntries(urlQuery.entries());
+    const qs = Object.fromEntries(urlQuery.entries());
     const method = req.method.toUpperCase();
 
     switch (method) {
@@ -153,10 +164,17 @@ const serverHandler = (req, res) => {
     }
 };
 
+//Creating Server
+const server = http.createServer(serverHandler);
+
+server.listen(3000,()=>{
+    console.log("The server is listening on port 3000");
+});
+
 // create connection to MySQL server
 db.connect((err) => {
     if (err) {
-        console.error('error: ' + err.message);
+        console.error('error: cant create connection to mysql server (NodeServer File' + err.message);
         return;
     }
     console.log('Connected to the MySQL server.');
@@ -203,6 +221,10 @@ db.connect((err) => {
             console.log('Reserves table created or already exists.');
         }
     });
+});
+
+server.on('close', () => {
+    closeDBConnection();
 });
 
 module.exports = serverHandler;
