@@ -29,51 +29,49 @@ db.connect((err) => {
     // Implementing new data to reserves table
     function insertReserve(reserveData, callback) {
         db.query(
-            "INSERT INTO reserves (b_id, Day) VALUES (?, ?)",
+            "INSERT INTO reserves (B_ID, DAY) VALUES (?, ?)",
             [reserveData.B_NAME, reserveData.TYPE],
             (err, results) => {
                 if (err) {
                     console.error('Error inserting reserves:', err);
                     return callback(err, null);
                 }
-                console.log('results are: '+ results);
-                callback(null, true);
+                callback(null, results);
             }
         );
     }
 
     // Change current reserve data
-    function updateReserve(s_id, updateFields, callback) {
+    function updateReserve(S_ID, updateFields, callback) {
         const setClause = Object.keys(updateFields)
             .map((field) => `${field} = ?`)
             .join(", ");
 
         const values = Object.values(updateFields);
-        values.push(s_id);
+        values.push(S_ID);
 
-        const query = `UPDATE reserves SET ${setClause} WHERE s_id = ?`;
+        const query = `UPDATE reserves SET ${setClause} WHERE S_ID = ?`;
 
         db.query(query, values, (err, results) => {
             if (err) {
                 console.error('Error updating reserve:', err);
                 return callback(err, null);
             }
-            console.log('reserve updated successfully:', results);
-            callback(null, true);
+            callback(null, results);
         });
     }
 
     // Deleting reserve data from database
-    function deleteReserve(s_id, callback) {
+    function deleteReserve(S_ID, callback) {
         db.query(
-            "DELETE FROM reserves WHERE s_id = ?",
-            [s_id],
+            "DELETE FROM reserves WHERE S_ID = ?",
+            [S_ID],
             (err, results) => {
                 if (err) {
                     console.error('Error deleting reserve:', err);
                     return callback(err, null);
                 }
-                callback(null, true);
+                callback(null, results);
             }
         );
     }

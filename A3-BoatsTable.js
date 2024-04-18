@@ -36,44 +36,42 @@ db.connect((err) => {
                     console.error('Error inserting boats: ', err);
                     return callback(err, null);
                 }
-                console.log('results are: '+ results);
-                callback(null, true);
+                callback(null, results);
             }
         );
     }
 
     // Change current boat data
-    function updateBoat(b_id, updateFields, callback) {
+    function updateBoat(B_ID, updateFields, callback) {
         const setClause = Object.keys(updateFields)
             .map((field) => `${field} = ?`)
             .join(", ");
 
         const values = Object.values(updateFields);
-        values.push(b_id);
+        values.push(B_ID);
 
-        const query = `UPDATE boats SET ${setClause} WHERE B_Id = ?`;
+        const query = `UPDATE boats SET ${setClause} WHERE B_ID = ?`;
 
         db.query(query, values, (err, results) => {
             if (err) {
                 console.error('Error updating boat: ', err);
                 return callback(err, null);
             }
-            console.log('Boat updated successfully: ', results);
-            callback(null, true);
+            callback(null, results);
         });
     }
 
     // Deleting boat data from database
-    function deleteBoat(b_id, callback) {
+    function deleteBoat(B_ID, callback) {
         db.query(
-            "DELETE FROM boats WHERE B_Id = ?",
-            [b_id],
+            "DELETE FROM boats WHERE B_ID = ?",
+            [B_ID],
             (err, results) => {
                 if (err) {
                     console.error('Error deleting boat:', err);
                     return callback(err, null);
                 }
-                callback(null, true);
+                callback(null, results);
             }
         );
     }

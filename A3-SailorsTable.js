@@ -1,7 +1,7 @@
 /*
 Name: Adrian Pena
 Date: 04/16/2024
-Title: 
+Title: Assignment 3
 Desciption: 
 */
 
@@ -22,7 +22,7 @@ db.connect((err) => {
 
     // Retrieve Sailor data from DB
     function getSailor(callback) {
-        db.query("SELECT s_id, S_name, B_date, Rate FROM Sailors", (err, results) => {
+        db.query("SELECT S_ID, S_NAME, B_DATE, RATE FROM Sailors", (err, results) => {
             if (err) {
                 console.error('Error fetching Sailors:', err);
                 return callback(err, null);
@@ -34,51 +34,49 @@ db.connect((err) => {
     // Implementing new data to Sailors table
     function insertSailor(SailorData, callback) {
         db.query(
-            "INSERT INTO Sailors (S_name, B_date, Rate) VALUES (?, ?)",
-            [SailorData.S_Name, SailorData.B_date, SailorData.Rate],
+            "INSERT INTO Sailors (S_NAME, B_DATE, RATE) VALUES (?, ?)",
+            [SailorData.S_NAME, SailorData.B_DATE, SailorData.RATE],
             (err, results) => {
                 if (err) {
                     console.error('Error inserting Sailors:', err);
                     return callback(err, null);
                 }
-                console.log('results are: '+ results);
-                callback(null, true);
+                callback(null, results);
             }
         );
     }
 
     // Change current Sailor data
-    function updateSailor(s_id, updateFields, callback) {
+    function updateSailor(S_ID, updateFields, callback) {
         const setClause = Object.keys(updateFields)
             .map((field) => `${field} = ?`)
             .join(", ");
 
         const values = Object.values(updateFields);
-        values.push(s_id);
+        values.push(S_ID);
 
-        const query = `UPDATE Sailors SET ${setClause} WHERE s_id = ?`;
+        const query = `UPDATE Sailors SET ${setClause} WHERE S_ID = ?`;
 
         db.query(query, values, (err, results) => {
             if (err) {
                 console.error('Error updating Sailor:', err);
                 return callback(err, null);
             }
-            console.log('Sailor updated successfully:', results);
-            callback(null, true);
+            callback(null, results);
         });
     }
 
     // Deleting Sailor data from database
-    function deleteSailor(s_id, callback) {
+    function deleteSailor(S_ID, callback) {
         db.query(
-            "DELETE FROM Sailors WHERE s_id = ?",
-            [s_id],
+            "DELETE FROM Sailors WHERE S_ID = ?",
+            [S_ID],
             (err, results) => {
                 if (err) {
                     console.error('Error deleting Sailor:', err);
                     return callback(err, null);
                 }
-                callback(null, true);
+                callback(null, results);
             }
         );
     }
