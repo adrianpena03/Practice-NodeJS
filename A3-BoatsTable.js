@@ -33,7 +33,7 @@ db.connect((err) => {
             [boatData.B_NAME, boatData.TYPE],
             (err, results) => {
                 if (err) {
-                    console.error('Error inserting boats:', err);
+                    console.error('Error inserting boats: ', err);
                     return callback(err, null);
                 }
                 console.log('results are: '+ results);
@@ -55,10 +55,10 @@ db.connect((err) => {
 
         db.query(query, values, (err, results) => {
             if (err) {
-                console.error('Error updating boat:', err);
+                console.error('Error updating boat: ', err);
                 return callback(err, null);
             }
-            console.log('Boat updated successfully:', results);
+            console.log('Boat updated successfully: ', results);
             callback(null, true);
         });
     }

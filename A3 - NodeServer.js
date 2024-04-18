@@ -1,10 +1,54 @@
+// Import Dependencies
 const mysql = require('mysql2');
+const fs = require('fs');
+
+// Importing A3 CRUD Operations
+const sailors = require('./A3-SailorsTable.js');
+const reserves = require('./A3-ReservesTable.js');
+const boats = require('./A3-BoatsTable.js');
+
 
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     database: 'SailingAdventure_DB',
 });
+
+
+// Creating the request handler
+function requestHandler(res, err, data) {
+    let statusCode = 200;
+    let responseData = data;
+
+    if (err) {
+        statusCode = 500;
+        responseData = { error: 'There was an internal server error' };
+    }
+
+    res.writeHead(statusCode, { 'Type of response content': 'application/json' });
+    res.end(JSON.stringify(responseData));
+}
+
+// Creating the server handler
+const serverHandler = (req, res) => {
+    // Construct the base URL and parse the request URL
+    const baseURL = 'http://' + req.headers.host + '/';
+    const parsedUrl = new URL(req.url, baseURL);
+
+    // Extract the path and trim any leading or trailing slashes
+    const path = parsedUrl.pathname;
+    const shorterPath = path.replace(/^\/+|\/+$/g, '');
+
+    // Extract query string parameters
+    const urlQuery = parsedUrl.searchParams;
+    const queryString = Object.fromEntries(urlQuery.entries());
+
+    // Convert method to uppercase for consistency
+    const method = req.method.toUpperCase();
+
+// CRUD Statements
+
+}
 
 // Connect to the database
 db.connect((err) => {
