@@ -19,6 +19,39 @@ Write a Node.js script that accepts two command line arguments:
 
 */
 
+
+const fs = require('fs');
+
+// check invocation
+
+if (process.argv.length !== 4){
+    console.log('Missing arguments.');
+    return;
+} 
+
+// check if specified file exists or not
+
+let filename = process.argv[2];
+let string = process.argv[3];
+
+fs.readFile(filename, 'utf8', (err, data)=>{
+    if (err) { // file does not exist
+        fs.writeFile(filename, string, (err)=>{
+            if (err) throw err;
+            else {
+                console.log('File created');
+            } 
+        })
+    } else { // File exists
+        fs.appendFile(filename, string, (err) =>{
+            if (err) throw err;
+            else {
+                console.log(data + '\n' + string);
+            }
+        })
+    }
+});
+
 /* 
 
 Lb3-Ex3
@@ -34,6 +67,30 @@ The script will perform the following actions.
 
 */
 
+const fs = require('fs');
+const path = require('path');
+
+if (process.argv.length !== 3) {
+    console.log('Missing arguments.');
+    return;
+} 
+
+let foldername = process.argv[2];
+
+fs.readdir(foldername, (err, folderContent) => {
+    if (err) { // folder does not exist
+        fs.mkdir(foldername, (err) => {
+            if (err) throw err;
+            else {
+                console.log('Folder created.');
+            }
+        });
+    } else { // folder exists
+        let fullpath = path.join(__dirname, foldername);
+        console.log(fullpath);
+        console.log(folderContent);
+    }
+});
 
 /*
 
@@ -57,6 +114,48 @@ Hints:
 
 */
 
+// imagine previous lab 6 code here
+
+const fs = require('fs');
+
+if (pathname === '/todo' || pathname === '/todo/') {
+    res.setHeader('content-type', 'application/json');
+    let stream = fs.createReadStream(todoFile);
+    res.statusCode(200);
+    stream.pipe(res);
+    stream.on(err, function(err) {
+        res.statusCode(500);
+        if (err.code === 'ENOENT') {
+            res.end('Not Found');
+        } else {
+            res.end('Internal Server Error');
+        }
+    })
+};
+
+
+if (pathname === '/todo/high' || pathname === '/todo/high') {
+    loadInitializeList(todoFile, (list)=> {
+        if (list.length === 0) {
+            res.end('List does not have any items.');
+        } else {
+            let highList = [];
+            list.forEach((element)=>{
+                if (element.priority === 'high') {
+                    highList.push(element);
+                }
+            });
+        }
+    });
+            if (highList.length === 0) {
+                res.end('No priority tasks.');
+            } else {
+                let highListStr = JSON.stringify(highList);
+                res.end(highListStr);
+            }
+
+}
+
 /*
 
 In L6, the server is implemented to read the text of the to-do list
@@ -78,16 +177,57 @@ const POSTHandler = (file, newItem, cb) => {
 }
 
 if (pathname === '/todo' || pathname === '/todo/'){
-    let text = '';
-    req.setEncoding('utf8');
     // TODO: Set up a listener for the data event and in the event handler
     // add the data chunks to text
+    let text = '';
+    req.on('data', (chunk) =>{
+        text += chunk;
+    })
     // TODO: Set up a listener for the end event and in the event handler
     // 1. Add the text to the query as a new key
     // 2. Move the call of the POSTHandler inside the event handler
-    POSTHandler (todoFile,query,(statusCode,response)=>{
-    res.setHeader('content-type','text/plain; charset="utf-8"');
-    res.writeHeader(statusCode)
-    res.end(response);
+    req.on('end', ()=>{
+        query.text = text;
+        POSTHandler (todoFile,query,(statusCode,response)=>{
+            res.setHeader('content-type','text/plain; charset="utf-8"');
+            res.writeHeader(statusCode)
+            res.end(response);
+            });
     });
+}
+
+// Event Emitter Code (also write & append data to a file)
+
+// Add dependencies
+const EventEmitter = require('events');
+const fs = require('fs');
+const path = require('path');
+
+// Check for correct invocation
+if (process.argv.length < 5) {
+    console.log(`Usage: node ${path.basename(process.argv[1])} [file name] [text] [choice]`);
+} else {
+    // Declare a new event emitter object
+    const myevent1 = new EventEmitter();
+
+    // Event handlers
+    const eventHandler1 = (fname, data) => {
+        fs.writeFile(fname, data + '\n', (err) => {
+            if (err) throw err;
+            console.log('Data has been written to the file');
+        });
+    };
+
+    const eventHandler2 = (fname, data) => {
+        fs.appendFile(fname, data + '\n', (err) => {
+            if (err) throw err;
+            console.log('Data has been appended to the file');
+        });
+    };
+
+    myevent1.on("write", eventHandler1); // listener for 'write'
+    myevent1.on("append", eventHandler2); // listener for 'append'
+
+    // Emit the event
+    myevent1.emit(process.argv[4], process.argv[2], process.argv[3]);
 }
